@@ -81,7 +81,7 @@ export const GameScreen = () => {
   );
 };
 
-export const Main = styled.View<{backgroundColor: string}>`
+const Main = styled.View<{backgroundColor: string}>`
   flex: 1;
   background-color: ${({backgroundColor}) => backgroundColor};
   justify-content: center;
@@ -93,7 +93,7 @@ const SelectTitle = styled(Title)<{textColor: string}>`
   color: ${({textColor}) => textColor};
 `;
 
-export const Row = styled.View`
+const Row = styled.View`
   flex-direction: row;
   width: 100%;
   padding: 0px 16px;
