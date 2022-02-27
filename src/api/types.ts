@@ -21,4 +21,9 @@ export type StarshipsResourcesUri =
   | 'films'
   | 'pilots';
 
+export type Response<T extends string> = {
+  next: string;
+  results: Array<Record<T, string | Array<string>>>;
+};
+
 export type Resource<T> = {uriParam: T; message: string};

@@ -1,23 +1,26 @@
-import {PeopleResurcesUri, StarshipsResourcesUri} from './../api/types';
+import {Response} from './../api/types';
 import {swapiUrls} from '@/api/consts';
 import {SwapiUrlType} from '@/api/types';
 import {useState, useEffect} from 'react';
 
 interface useFetchProps {
   url: SwapiUrlType;
-  resource: StarshipsResourcesUri | PeopleResurcesUri;
   waitForFetching?: boolean;
 }
 
-export const useFetch = ({url, waitForFetching, resource}: useFetchProps) => {
+export const useFetch = <T extends string>({
+  url,
+  waitForFetching,
+}: useFetchProps) => {
   const [status, setStatus] = useState<
     'idle' | 'fetching' | 'fetched' | 'error'
   >('idle');
   const [waitForFetch, setWaitForFetch] = useState(waitForFetching);
   const [refetchData, setRefetchData] = useState(false);
-  const [data, setData] = useState();
+  const [data, setData] = useState<Response<T>>();
+  const [nextPage, setNextPage] = useState<string | undefined>();
 
-  const getData = () => {
+  const refreshData = () => {
     if (waitForFetch) {
       setWaitForFetch(false);
     } else {
@@ -25,8 +28,23 @@ export const useFetch = ({url, waitForFetching, resource}: useFetchProps) => {
     }
   };
 
+  const getNextPage = async () => {
+    if (nextPage) {
+      setStatus('fetching');
+      try {
+        const response = await fetch(nextPage);
+        const responseJson: Response<T> = await response.json();
+        setData(responseJson);
+        setNextPage(responseJson.next);
+        setStatus('fetched');
+      } catch (error) {
+        setStatus('error');
+      }
+    }
+  };
+
   const resetData = () => {
-    if (!!data) {
+    if (data) {
       setData(undefined);
     }
   };
@@ -39,8 +57,9 @@ export const useFetch = ({url, waitForFetching, resource}: useFetchProps) => {
       setStatus('fetching');
       try {
         const response = await fetch(swapiUrls[url]);
-        const responseJson = await response.json();
+        const responseJson: Response<T> = await response.json();
         setData(responseJson);
+        setNextPage(responseJson.next);
         setStatus('fetched');
       } catch (error) {
         setStatus('error');
@@ -50,5 +69,5 @@ export const useFetch = ({url, waitForFetching, resource}: useFetchProps) => {
     fetchData();
   }, [url, waitForFetch, refetchData]);
 
-  return {status, data, getData, resetData};
+  return {status, data, refreshData, resetData, getNextPage, nextPage};
 };

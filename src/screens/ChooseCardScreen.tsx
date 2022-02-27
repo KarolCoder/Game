@@ -1,9 +1,11 @@
+import {PeopleResurcesUri, StarshipsResourcesUri} from '@/api/types';
 import {Spacer} from '@/components';
 import {useFetch} from '@/hooks/useFetch';
 import {MainParamList} from '@/navigation/types/MainParamList';
+import {getRandomInt, getResult} from '@/utils/functions';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Paragraph,
   Title,
@@ -19,20 +21,76 @@ export const ChooseCardScreen = () => {
     params: {activeCategory, activeResource},
   } = useRoute<RouteProp<MainParamList, 'ChooseCard'>>();
   const {navigate} = useNavigation<NativeStackNavigationProp<MainParamList>>();
-  const {data, status, getData, resetData} = useFetch({
-    url: activeCategory === 'People' ? 'people' : 'starships',
-    waitForFetching: true,
-    resource: activeResource.uriParam,
-  });
-  const resourceFromDataFirst =
-    data && data.results && data.results.length > 0
-      ? data.results[0].model
-      : undefined;
-  const resourceFromDataSecond =
-    data && data.results && data.results.length > 1
-      ? data.results[1].model
-      : undefined;
-  const result = 'winner';
+  const {data, status, refreshData, resetData, getNextPage, nextPage} =
+    useFetch<PeopleResurcesUri | StarshipsResourcesUri>({
+      url: activeCategory === 'People' ? 'people' : 'starships',
+      waitForFetching: true,
+    });
+  const [selectedCard, setSelectedCard] = useState<number | undefined>();
+  const [resourcesFromData, setResourcesFromData] = useState<{
+    firstResource: string | string[] | undefined;
+    secondResource: string | string[] | undefined;
+  }>();
+  const [result, setResult] = useState<
+    'Tie' | 'Winner' | 'Loser' | 'unknown' | undefined
+  >('unknown');
+  const [winCounter, setWinCounter] =
+    useState<{you: number; opponent: number}>();
+
+  useEffect(() => {
+    const resourceFromDataFirst =
+      data && data.results && data.results.length > 0
+        ? data.results[getRandomInt(0, data.results.length - 1)][
+            activeResource.uriParam
+          ]
+        : undefined;
+    const resourceFromDataSecond =
+      data && data.results && data.results.length > 0
+        ? data.results[getRandomInt(0, data.results.length - 1)][
+            activeResource.uriParam
+          ]
+        : undefined;
+    setResourcesFromData({
+      firstResource: resourceFromDataFirst,
+      secondResource: resourceFromDataSecond,
+    });
+    const dataResult = data
+      ? getResult({
+          firstValue: resourceFromDataFirst,
+          secondValue: resourceFromDataSecond,
+          resource: activeResource.uriParam,
+          selectedCard: selectedCard,
+        })
+      : 'unknown';
+
+    if (dataResult === 'Winner') {
+      setWinCounter(prev => {
+        if (!prev) {
+          return {you: 1, opponent: 0};
+        } else {
+          return {...prev, you: prev.you + 1};
+        }
+      });
+    } else if (dataResult === 'Loser') {
+      setWinCounter(prev => {
+        if (!prev) {
+          return {you: 0, opponent: 1};
+        } else {
+          return {...prev, opponent: prev.opponent + 1};
+        }
+      });
+    }
+    setResult(dataResult);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const firstValueDisplayed = Array.isArray(resourcesFromData?.firstResource)
+    ? resourcesFromData?.firstResource.length.toString()
+    : resourcesFromData?.firstResource;
+
+  const secondValueDisplayed = Array.isArray(resourcesFromData?.secondResource)
+    ? resourcesFromData?.secondResource.length.toString()
+    : resourcesFromData?.secondResource;
 
   return (
     <Main backgroundColor={colors.background}>
@@ -55,59 +113,100 @@ export const ChooseCardScreen = () => {
       <Row>
         <Card
           disabled={
-            (resourceFromDataFirst && resourceFromDataSecond) ||
+            (!!resourcesFromData?.firstResource &&
+              !!resourcesFromData?.secondResource) ||
             status === 'fetching'
           }
-          onPress={() => getData()}>
-          <Title>{resourceFromDataFirst ? resourceFromDataFirst : '?'}</Title>
+          onPress={() => {
+            setSelectedCard(0);
+            if (!nextPage) {
+              refreshData();
+            } else {
+              getNextPage();
+            }
+          }}>
+          <Title>{firstValueDisplayed ? firstValueDisplayed : '?'}</Title>
         </Card>
         <Spacer width={24} />
         <Card
           disabled={
-            (resourceFromDataFirst && resourceFromDataSecond) ||
+            (!!resourcesFromData?.firstResource &&
+              !!resourcesFromData?.secondResource) ||
             status === 'fetching'
           }
-          onPress={() => getData()}>
-          <Title>{resourceFromDataSecond ? resourceFromDataSecond : '?'}</Title>
+          onPress={() => {
+            setSelectedCard(1);
+            if (!nextPage) {
+              refreshData();
+            } else {
+              getNextPage();
+            }
+          }}>
+          <Title>{secondValueDisplayed ? secondValueDisplayed : '?'}</Title>
         </Card>
       </Row>
       {status === 'error' && (
-        <SmallText textColor={colors.accent}>
+        <SmallText textColor={colors.error}>
           There was some issue, please try again
         </SmallText>
       )}
-      {result !== 'winner' ? (
+      {result === 'Winner' ? (
         <BigText textColor={colors.primary}>
           Congratualtions, you won!!!
         </BigText>
-      ) : (
+      ) : result === 'Loser' ? (
         <BigText textColor={colors.primary}>You lose, loser :D</BigText>
-      )}
-      {resourceFromDataFirst && resourceFromDataSecond && (
+      ) : result === 'Tie' ? (
+        <BigText textColor={colors.primary}>Tie, try again</BigText>
+      ) : !result ? (
+        <BigText textColor={colors.primary}>
+          Couldn't resolve winner please go to start
+        </BigText>
+      ) : null}
+      {winCounter && (
         <Row>
-          <ContinueButton
-            mode="contained"
-            disabled={!(activeResource && activeCategory)}
-            onPress={() => resetData()}>
-            Reset cards
-          </ContinueButton>
-          <Spacer width={24} />
-          <ContinueButton
-            mode="contained"
-            disabled={!(activeResource && activeCategory)}
-            onPress={() => navigate('Welcome')}>
-            Go to start
-          </ContinueButton>
+          <CategoryBox>
+            <SmallText textColor={colors.primary}>Your wins</SmallText>
+            <BigText textColor={colors.primary}>{winCounter.you}</BigText>
+          </CategoryBox>
+          <CategoryBox>
+            <SmallText textColor={colors.primary}>Opponent wins</SmallText>
+            <BigText textColor={colors.primary}>{winCounter.opponent}</BigText>
+          </CategoryBox>
         </Row>
       )}
+      {!!resourcesFromData?.firstResource &&
+        !!resourcesFromData?.secondResource && (
+          <Row>
+            <BottomButton
+              mode="contained"
+              disabled={!(activeResource && activeCategory)}
+              onPress={() => resetData()}>
+              Reset cards
+            </BottomButton>
+            <Spacer width={24} />
+            <BottomButton
+              mode="contained"
+              disabled={!(activeResource && activeCategory)}
+              onPress={() => navigate('Welcome')}>
+              Go to start
+            </BottomButton>
+          </Row>
+        )}
     </Main>
   );
 };
 
-const Main = styled.View<{backgroundColor: string}>`
+const Main = styled.ScrollView.attrs(() => ({
+  contentContainerStyle: {
+    flexGrow: 1,
+    alignItems: 'center',
+    paddingBottom: 16,
+    paddingHorizontal: 16,
+  },
+}))<{backgroundColor: string}>`
   flex: 1;
   background-color: ${({backgroundColor}) => backgroundColor};
-  align-items: center;
 `;
 
 const ActivityIndicatorWrapper = styled.View`
@@ -154,14 +253,7 @@ const Card = styled.TouchableOpacity`
   border-radius: 8px;
 `;
 
-const BottomsBottomWrapper = styled.View`
-  flex-direction: row;
-  justify-content: space-evenly;
-  width: 100%;
-  padding: 24px 16px;
-`;
-
-const ContinueButton = styled(Button)<{disabled?: boolean}>`
+const BottomButton = styled(Button)`
   padding: 4px 8px;
   flex: 1;
 `;

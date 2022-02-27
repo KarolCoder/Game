@@ -46,6 +46,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|(?!victory-native)/|@react-native|react-navigation|@react-navigation|crypto-es|@twotalltotems/react-native-otp-input|@invertase/react-native-apple-authentication|victory-bar|victory-*|victory-chart|victory-axis|victory-group|@react-native-community/google-signin/.*))"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
