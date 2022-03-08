@@ -27,3 +27,13 @@ export type Response<T extends string> = {
 };
 
 export type Resource<T> = {uriParam: T; message: string};
+
+export type ConsumablesUnit =
+  | 'years'
+  | 'year'
+  | 'months'
+  | 'month'
+  | 'weeks'
+  | 'week'
+  | 'days'
+  | 'day';

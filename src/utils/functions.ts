@@ -1,3 +1,6 @@
+import {ConsumablesUnit} from '@/api/types';
+import {consumablesUnitsComparision} from './consts';
+
 export const getRandomInt = (min: number, max: number) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -15,23 +18,15 @@ export const getResult = ({
   selectedCard?: number;
   resource: string;
 }) => {
-  if (!firstValue && !secondValue) {
-    return 'Tie';
+  const validatedValues = validateValues({
+    firstValue: firstValue,
+    secondValue: secondValue,
+    selectedCard,
+  });
+  if (validatedValues) {
+    return validatedValues;
   }
-  if (firstValue && !secondValue) {
-    if (selectedCard === 0) {
-      return 'Winner';
-    } else {
-      return 'Loser';
-    }
-  }
-  if (!firstValue && secondValue) {
-    if (selectedCard === 0) {
-      return 'Loser';
-    } else {
-      return 'Winner';
-    }
-  }
+
   if (Array.isArray(firstValue) && Array.isArray(secondValue)) {
     return getWinnerForArrays({
       firstValue: firstValue,
@@ -43,24 +38,55 @@ export const getResult = ({
     (typeof firstValue === 'string' || firstValue instanceof String) &&
     (typeof secondValue === 'string' || secondValue instanceof String)
   ) {
-    if (resource === 'crew') {
-      return getWinnerForCrew({
-        firstValue: firstValue as string,
-        secondValue: secondValue as string,
-        selectedCard,
-      });
-    } else if (resource === 'consumables') {
+    if (resource === 'consumables') {
       return getWinnerForConsumables({
         firstValue: firstValue as string,
         secondValue: secondValue as string,
         selectedCard,
       });
     }
-    return getWinnerForDefaultStringResource({
+    return getWinnerForStrings({
       firstValue: firstValue as string,
       secondValue: secondValue as string,
       selectedCard,
     });
+  }
+};
+
+const validateValues = ({
+  firstValue,
+  secondValue,
+  selectedCard,
+}: {
+  firstValue?: string | string[];
+  secondValue?: string | string[];
+  selectedCard?: number;
+}) => {
+  if (!firstValue && !secondValue) {
+    return 'Tie';
+  }
+  if (firstValue && !secondValue) {
+    return getWinnerBySelectedCard({firstCardShouldWin: true, selectedCard});
+  }
+  if (!firstValue && secondValue) {
+    return getWinnerBySelectedCard({selectedCard});
+  }
+};
+
+const getWinnerBySelectedCard = ({
+  firstCardShouldWin,
+  selectedCard,
+}: {
+  firstCardShouldWin?: boolean;
+  selectedCard?: number;
+}) => {
+  if (
+    (selectedCard === 0 && firstCardShouldWin) ||
+    (selectedCard === 1 && !firstCardShouldWin)
+  ) {
+    return 'Winner';
+  } else {
+    return 'Loser';
   }
 };
 
@@ -73,21 +99,11 @@ const getWinnerForArrays = ({
   secondValue: string[];
   selectedCard?: number;
 }) => {
-  if (firstValue.length > secondValue.length) {
-    if (selectedCard === 0) {
-      return 'Winner';
-    } else {
-      return 'Loser';
-    }
-  } else if (firstValue.length < secondValue.length) {
-    if (selectedCard === 0) {
-      return 'Loser';
-    } else {
-      return 'Winner';
-    }
-  } else {
-    return 'Tie';
-  }
+  return getWinnerByBiggerNumbers({
+    parsedFirstValue: firstValue.length,
+    parsedSecondValue: secondValue.length,
+    selectedCard,
+  });
 };
 
 const getWinnerForConsumables = ({
@@ -101,139 +117,52 @@ const getWinnerForConsumables = ({
 }) => {
   const firstValueSplit = firstValue.split(' ');
   const secondValueSplit = secondValue.split(' ');
-
   if (firstValueSplit.length > 1 && secondValueSplit.length > 1) {
     const firstValueQuantity = firstValueSplit[0];
     const secondValueQuantity = secondValueSplit[0];
     const firstValueTimeUnit = firstValueSplit[1];
     const secondValueTimeUnit = secondValueSplit[1];
     if (secondValueTimeUnit === firstValueTimeUnit) {
-      if (firstValueQuantity > secondValueQuantity) {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      } else if (secondValueQuantity < firstValueQuantity) {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      } else {
-        return 'Tie';
-      }
-    } else if (secondValueTimeUnit === 'years') {
-      if (selectedCard === 0) {
-        return 'Loser';
-      } else {
-        return 'Winner';
-      }
-    } else if (secondValueTimeUnit === 'year') {
-      if (firstValueTimeUnit === 'years') {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      } else {
-        if (selectedCard === 1) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      }
-    } else if (secondValueTimeUnit === 'months') {
-      if (firstValueTimeUnit === 'years' || firstValueTimeUnit === 'year') {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      } else {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      }
-    } else if (secondValueTimeUnit === 'month') {
-      if (
-        firstValueTimeUnit === 'years' ||
-        firstValueTimeUnit === 'year' ||
-        firstValueTimeUnit === 'months'
-      ) {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      } else {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      }
-    } else if (secondValueTimeUnit === 'weeks') {
-      if (
-        firstValueTimeUnit === 'years' ||
-        firstValueTimeUnit === 'year' ||
-        firstValueTimeUnit === 'months' ||
-        firstValueTimeUnit === 'month'
-      ) {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      } else {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      }
-    } else if (secondValueTimeUnit === 'week') {
-      if (firstValueTimeUnit === 'days' || firstValueTimeUnit === 'day') {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      } else {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      }
-    } else if (secondValueTimeUnit === 'days') {
-      if (firstValueTimeUnit === 'day') {
-        if (selectedCard === 0) {
-          return 'Loser';
-        } else {
-          return 'Winner';
-        }
-      } else {
-        if (selectedCard === 0) {
-          return 'Winner';
-        } else {
-          return 'Loser';
-        }
-      }
-    } else if (secondValueTimeUnit === 'day') {
-      if (selectedCard === 0) {
-        return 'Winner';
-      } else {
-        return 'Loser';
-      }
+      return getWinnerForStrings({
+        firstValue: firstValueQuantity,
+        secondValue: secondValueQuantity,
+        selectedCard,
+      });
+    } else {
+      return getWinnerForConsumablesDifferentsUnits({
+        firstValueTimeUnit: firstValueTimeUnit as ConsumablesUnit,
+        secondValueTimeUnit: secondValueTimeUnit as ConsumablesUnit,
+        selectedCard,
+      });
     }
   }
   return;
 };
 
-const getWinnerForCrew = ({
+const getWinnerForConsumablesDifferentsUnits = ({
+  firstValueTimeUnit,
+  secondValueTimeUnit,
+  selectedCard,
+}: {
+  firstValueTimeUnit: ConsumablesUnit;
+  secondValueTimeUnit: ConsumablesUnit;
+  selectedCard?: number;
+}) => {
+  const tableWithWinnerUnits = consumablesUnitsComparision[secondValueTimeUnit];
+  if (
+    tableWithWinnerUnits &&
+    tableWithWinnerUnits.includes(firstValueTimeUnit)
+  ) {
+    return getWinnerBySelectedCard({
+      firstCardShouldWin: true,
+      selectedCard,
+    });
+  } else {
+    return getWinnerBySelectedCard({selectedCard});
+  }
+};
+
+const getWinnerForStrings = ({
   firstValue,
   secondValue,
   selectedCard,
@@ -241,6 +170,42 @@ const getWinnerForCrew = ({
   firstValue: string;
   secondValue: string;
   selectedCard?: number;
+}) => {
+  const {parsedFirstValue, parsedSecondValue} = parseStringToFloat({
+    firstValue,
+    secondValue,
+  });
+  return getWinnerByBiggerNumbers({
+    parsedFirstValue,
+    parsedSecondValue,
+    selectedCard,
+  });
+};
+
+const getWinnerByBiggerNumbers = ({
+  parsedFirstValue,
+  parsedSecondValue,
+  selectedCard,
+}: {
+  parsedFirstValue: number;
+  parsedSecondValue: number;
+  selectedCard?: number;
+}) => {
+  if (parsedFirstValue > parsedSecondValue) {
+    return getWinnerBySelectedCard({firstCardShouldWin: true, selectedCard});
+  } else if (parsedFirstValue < parsedSecondValue) {
+    return getWinnerBySelectedCard({selectedCard});
+  } else {
+    return 'Tie';
+  }
+};
+
+const parseStringToFloat = ({
+  firstValue,
+  secondValue,
+}: {
+  firstValue: string;
+  secondValue: string;
 }) => {
   const firstValueSplit = firstValue.split('-');
   const secondValueSplit = secondValue.split('-');
@@ -256,49 +221,8 @@ const getWinnerForCrew = ({
   );
   const parsedFirstValue = isNaN(firstValueFLoat) ? -1 : firstValueFLoat;
   const parsedSecondValue = isNaN(secondValueFLoat) ? -1 : secondValueFLoat;
-  if (parsedFirstValue > parsedSecondValue) {
-    if (selectedCard === 0) {
-      return 'Winner';
-    } else {
-      return 'Loser';
-    }
-  } else if (firstValueFLoat < secondValueFLoat) {
-    if (selectedCard === 0) {
-      return 'Loser';
-    } else {
-      return 'Winner';
-    }
-  } else {
-    return 'Tie';
-  }
-};
-
-const getWinnerForDefaultStringResource = ({
-  firstValue,
-  secondValue,
-  selectedCard,
-}: {
-  firstValue: string;
-  secondValue: string;
-  selectedCard?: number;
-}) => {
-  const firstValueFLoat = parseFloat(firstValue.replace(',', ''));
-  const secondValueFLoat = parseFloat(secondValue.replace(',', ''));
-  const parsedFirstValue = isNaN(firstValueFLoat) ? -1 : firstValueFLoat;
-  const parsedSecondValue = isNaN(secondValueFLoat) ? -1 : secondValueFLoat;
-  if (parsedFirstValue > parsedSecondValue) {
-    if (selectedCard === 0) {
-      return 'Winner';
-    } else {
-      return 'Loser';
-    }
-  } else if (parsedFirstValue < parsedSecondValue) {
-    if (selectedCard === 0) {
-      return 'Loser';
-    } else {
-      return 'Winner';
-    }
-  } else {
-    return 'Tie';
-  }
+  return {
+    parsedFirstValue: parsedFirstValue,
+    parsedSecondValue: parsedSecondValue,
+  };
 };
