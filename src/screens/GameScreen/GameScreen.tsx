@@ -9,8 +9,16 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React, {useState} from 'react';
 import {useEffect} from 'react';
-import {Button, Title, useTheme} from 'react-native-paper';
-import styled, {css} from 'styled-components/native';
+import {useTheme} from 'react-native-paper';
+import {
+  ContinueButton,
+  Main,
+  OptionButton,
+  ResourceButton,
+  ResourcesList,
+  Row,
+  SelectTitle,
+} from './styles';
 
 export const GameScreen = () => {
   const {colors} = useTheme();
@@ -80,60 +88,3 @@ export const GameScreen = () => {
     </Main>
   );
 };
-
-const Main = styled.View<{backgroundColor: string}>`
-  flex: 1;
-  background-color: ${({backgroundColor}) => backgroundColor};
-  justify-content: center;
-  align-items: center;
-`;
-
-const SelectTitle = styled(Title)<{textColor: string}>`
-  margin: 24px 0px 12px;
-  color: ${({textColor}) => textColor};
-`;
-
-const Row = styled.View`
-  flex-direction: row;
-  width: 100%;
-  padding: 0px 16px;
-`;
-
-const OptionButton = styled(Button)<{isActive?: boolean}>`
-  padding: ${({isActive}) => (isActive ? '0px 4px' : '4px')};
-  flex: 1;
-  justify-content: center;
-  ${({isActive}) =>
-    isActive &&
-    css`
-      border: 4px solid #ffffff;
-    `}
-`;
-
-const ResourcesList = styled.ScrollView.attrs(() => ({
-  contentContainerStyle: {
-    flexGrow: 1,
-    paddingBottom: 16,
-    paddingHorizontal: 16,
-  },
-}))`
-  flex: 1;
-  width: 100%;
-`;
-
-const ResourceButton = styled(Button)<{isActive?: boolean}>`
-  padding: ${({isActive}) => (isActive ? '0px 4px' : '4px')};
-  margin-bottom: 8px;
-  ${({isActive}) =>
-    isActive &&
-    css`
-      border: 4px solid #ffffff;
-    `}
-`;
-
-const ContinueButton = styled(Button)<{disabled?: boolean}>`
-  padding: 4px 8px;
-  margin-bottom: 16px;
-  margin-top: 24px;
-  background-color: ${({disabled}) => (disabled ? '	#E8E8E855' : '#F8F8F8')};
-`;

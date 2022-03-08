@@ -3,8 +3,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 
-import {Button, Title, useTheme} from 'react-native-paper';
-import styled from 'styled-components/native';
+import {Title, useTheme} from 'react-native-paper';
+import {BottomButton, ButtonWrapper, StarWarsImage, TopText} from './styles';
 
 export const WelcomeScreen = () => {
   const {colors} = useTheme();
@@ -22,25 +22,3 @@ export const WelcomeScreen = () => {
     </StarWarsImage>
   );
 };
-
-const StarWarsImage = styled.ImageBackground`
-  flex: 1;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-`;
-
-const ButtonWrapper = styled.View`
-  width: 100%;
-  margin-top: auto;
-  padding: 0px 16px;
-`;
-
-const BottomButton = styled(Button)`
-  margin-bottom: 16px;
-`;
-
-const TopText = styled(Title)<{textColor: string}>`
-  margin-top: 40px;
-  color: ${({textColor}) => textColor};
-`;
