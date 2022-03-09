@@ -1,5 +1,6 @@
+import {useGame} from '@/containers/useGame';
 import {MainParamList} from '@/navigation/types/MainParamList';
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import React from 'react';
 import {useTheme, ActivityIndicator} from 'react-native-paper';
@@ -12,9 +13,6 @@ import {ActivityIndicatorWrapper, Main, SmallText} from './styles';
 
 export const ChooseCardScreen = () => {
   const {colors} = useTheme();
-  const {
-    params: {activeCategory, activeResource},
-  } = useRoute<RouteProp<MainParamList, 'ChooseCard'>>();
   const {navigate} = useNavigation<NativeStackNavigationProp<MainParamList>>();
   const {
     firstValueDisplayed,
@@ -26,9 +24,10 @@ export const ChooseCardScreen = () => {
     nextPage,
     winCounter,
     result,
-    setSelectedCard,
     resourcesFromData,
-  } = useChooseCardScreen({activeCategory, activeResource});
+  } = useChooseCardScreen();
+  const {updateGameSelectedCard, selectedGameValues} = useGame();
+  const {category, resource} = {...selectedGameValues};
 
   return (
     <Main backgroundColor={colors.background}>
@@ -39,14 +38,14 @@ export const ChooseCardScreen = () => {
       )}
       <TextSection
         leftTopText="Category"
-        bottomLeftText={activeCategory}
+        bottomLeftText={category}
         rightTopText="Resource"
-        bottomRightText={activeResource.message}
+        bottomRightText={resource?.message}
       />
       <CardsSection
         {...{
           resourcesFromData,
-          setSelectedCard,
+          updateGameSelectedCard,
           refreshData,
           getNextPage,
           firstValueDisplayed,
@@ -74,7 +73,7 @@ export const ChooseCardScreen = () => {
           <BottomButtons
             onLeftPress={() => resetData()}
             onRightPress={() => navigate('Welcome')}
-            isDisabled={!(activeResource && activeCategory)}
+            isDisabled={!(resource && category)}
           />
         )}
     </Main>

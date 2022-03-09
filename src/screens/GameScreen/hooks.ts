@@ -2,32 +2,28 @@ import {
   peopleResourcesToBattle,
   starshipsResourcesToBattle,
 } from '@/api/consts';
-import {StarshipsResourcesUri, PeopleResurcesUri, Resource} from '@/api/types';
-import {useEffect, useState} from 'react';
+import {useGame} from '@/containers/useGame';
+import {useEffect, useMemo} from 'react';
 
 export const useGameScreen = () => {
-  const [activeCategory, setActiveCategory] = useState<
-    'Starships' | 'People'
-  >();
-  const [activeResource, setActiveResource] =
-    useState<Resource<StarshipsResourcesUri | PeopleResurcesUri>>();
+  const {selectedGameValues, updateGameResource} = useGame();
+  const {category} = {...selectedGameValues};
 
   useEffect(() => {
-    setActiveResource(undefined);
-  }, [activeCategory]);
+    updateGameResource(undefined);
+  }, [category, updateGameResource]);
 
-  const resources =
-    activeCategory === 'People'
-      ? peopleResourcesToBattle
-      : activeCategory === 'Starships'
-      ? starshipsResourcesToBattle
-      : [];
+  const resources = useMemo(
+    () =>
+      category === 'People'
+        ? peopleResourcesToBattle
+        : category === 'Starships'
+        ? starshipsResourcesToBattle
+        : [],
+    [category],
+  );
 
   return {
     resources,
-    activeResource,
-    setActiveCategory,
-    activeCategory,
-    setActiveResource,
   };
 };

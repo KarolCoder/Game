@@ -1,3 +1,4 @@
+import {useGame} from '@/containers/useGame';
 import {MainParamList} from '@/navigation/types/MainParamList';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -16,21 +17,18 @@ import {
 export const GameScreen = () => {
   const {colors} = useTheme();
   const {navigate} = useNavigation<NativeStackNavigationProp<MainParamList>>();
-  const {
-    resources,
-    activeResource,
-    setActiveCategory,
-    activeCategory,
-    setActiveResource,
-  } = useGameScreen();
+  const {resources} = useGameScreen();
+  const {updateGameCategory, updateGameResource, selectedGameValues} =
+    useGame();
+  const {category, resource} = {...selectedGameValues};
 
   return (
     <Main backgroundColor={colors.background}>
       <CategorySection
-        activeCategory={activeCategory}
-        setActiveCategory={setActiveCategory}
+        activeCategory={category}
+        setActiveCategory={updateGameCategory}
       />
-      {activeCategory && (
+      {category && (
         <SelectTitle textColor={colors.primary}>Choose resource</SelectTitle>
       )}
       <ResourcesList>
@@ -38,21 +36,18 @@ export const GameScreen = () => {
           <ResourceButton
             key={message}
             mode="contained"
-            isActive={message === activeResource?.message}
-            onPress={() => setActiveResource({message, uriParam})}>
+            isActive={message === resource?.message}
+            onPress={() => updateGameResource({message, uriParam})}>
             {message}
           </ResourceButton>
         ))}
       </ResourcesList>
       <ContinueButton
         mode="contained"
-        disabled={!(activeResource && activeCategory)}
+        disabled={!(resource && category)}
         onPress={() => {
-          if (activeCategory && activeResource) {
-            navigate('ChooseCard', {
-              activeCategory: activeCategory,
-              activeResource: activeResource,
-            });
+          if (category && resource) {
+            navigate('ChooseCard');
           }
         }}>
         Continue

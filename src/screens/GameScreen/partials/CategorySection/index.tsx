@@ -1,14 +1,13 @@
 import {Spacer} from '@/components';
+import {GameCategory} from '@/utils/types';
 import React from 'react';
 import {useTheme} from 'react-native-paper';
 import {Row, SelectTitle} from '../../styles';
 import {OptionButton} from './styles';
 
 interface CategorySectionProps {
-  activeCategory?: 'Starships' | 'People';
-  setActiveCategory: React.Dispatch<
-    React.SetStateAction<'Starships' | 'People' | undefined>
-  >;
+  activeCategory?: GameCategory;
+  setActiveCategory: (category?: GameCategory | undefined) => void;
 }
 
 export const CategorySection: React.FC<CategorySectionProps> = ({

@@ -1,7 +1,7 @@
 import {BigText} from '../../styles';
 import React from 'react';
 import {useTheme} from 'react-native-paper';
-import {GameResult} from '../../types';
+import {GameResult} from '@/utils/types';
 
 interface ResultLabelProps {
   result: GameResult;

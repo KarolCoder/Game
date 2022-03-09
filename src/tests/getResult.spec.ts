@@ -1,4 +1,4 @@
-import {getResult} from '@/utils/functions';
+import {getResult} from '@/screens/ChooseCardScreen/functions';
 
 describe('get result function tests', () => {
   it('string in values as integers', () => {

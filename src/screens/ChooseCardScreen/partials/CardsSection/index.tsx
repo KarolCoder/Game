@@ -1,26 +1,24 @@
 import {Spacer} from '@/components';
+import {ResourcesFromData} from '@/utils/types';
 import React from 'react';
 import {Title, useTheme} from 'react-native-paper';
 import {Row} from '../../styles';
 import {Card, SelectTitle} from './styles';
 
 interface CardsSectionProps {
-  setSelectedCard: React.Dispatch<React.SetStateAction<number | undefined>>;
+  updateGameSelectedCard: (card?: number | undefined) => void;
   refreshData: () => void;
   getNextPage: () => Promise<void>;
   firstValueDisplayed?: string;
   secondValueDisplayed?: string;
-  resourcesFromData?: {
-    firstResource: string | string[] | undefined;
-    secondResource: string | string[] | undefined;
-  };
+  resourcesFromData?: ResourcesFromData;
   nextPage?: string;
   status?: string;
 }
 
 export const CardsSection: React.FC<CardsSectionProps> = ({
   resourcesFromData,
-  setSelectedCard,
+  updateGameSelectedCard,
   refreshData,
   getNextPage,
   firstValueDisplayed,
@@ -40,7 +38,7 @@ export const CardsSection: React.FC<CardsSectionProps> = ({
             status === 'fetching'
           }
           onPress={() => {
-            setSelectedCard(0);
+            updateGameSelectedCard(0);
             if (!nextPage) {
               refreshData();
             } else {
@@ -57,7 +55,7 @@ export const CardsSection: React.FC<CardsSectionProps> = ({
             status === 'fetching'
           }
           onPress={() => {
-            setSelectedCard(1);
+            updateGameSelectedCard(1);
             if (!nextPage) {
               refreshData();
             } else {

@@ -1,7 +1,7 @@
 import {Response} from './../api/types';
 import {swapiUrls} from '@/api/consts';
 import {SwapiUrlType} from '@/api/types';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useCallback} from 'react';
 
 interface useFetchProps {
   url: SwapiUrlType;
@@ -20,15 +20,15 @@ export const useFetch = <T extends string>({
   const [data, setData] = useState<Response<T>>();
   const [nextPage, setNextPage] = useState<string | undefined>();
 
-  const refreshData = () => {
+  const refreshData = useCallback(() => {
     if (waitForFetch) {
       setWaitForFetch(false);
     } else {
       setRefetchData(prev => !prev);
     }
-  };
+  }, [waitForFetch]);
 
-  const getNextPage = async () => {
+  const getNextPage = useCallback(async () => {
     if (nextPage) {
       setStatus('fetching');
       try {
@@ -41,13 +41,13 @@ export const useFetch = <T extends string>({
         setStatus('error');
       }
     }
-  };
+  }, [nextPage]);
 
-  const resetData = () => {
+  const resetData = useCallback(async () => {
     if (data) {
       setData(undefined);
     }
-  };
+  }, [data]);
 
   useEffect(() => {
     if (!url || waitForFetch) {
