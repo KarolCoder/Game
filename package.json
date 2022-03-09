@@ -47,6 +47,10 @@
   },
   "jest": {
     "preset": "react-native",
+    "setupFiles": [
+      "./jest/setup.js"
+    ],
+    "globalSetup": "./jest/globalSetup.js",
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|(?!victory-native)/|@react-native|react-navigation|@react-navigation|crypto-es|@twotalltotems/react-native-otp-input|@invertase/react-native-apple-authentication|victory-bar|victory-*|victory-chart|victory-axis|victory-group|@react-native-community/google-signin/.*))"
     ],
