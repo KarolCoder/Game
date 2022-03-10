@@ -32,9 +32,10 @@ export const GameScreen = () => {
         <SelectTitle textColor={colors.primary}>Choose resource</SelectTitle>
       )}
       <ResourcesList>
-        {resources.map(({message, uriParam}) => (
+        {resources.map(({message, uriParam}, index) => (
           <ResourceButton
             key={message}
+            testID={'resource button' + index}
             mode="contained"
             isActive={message === resource?.message}
             onPress={() => updateGameResource({message, uriParam})}>
@@ -43,6 +44,7 @@ export const GameScreen = () => {
         ))}
       </ResourcesList>
       <ContinueButton
+        testID="continue button"
         mode="contained"
         disabled={!(resource && category)}
         onPress={() => {

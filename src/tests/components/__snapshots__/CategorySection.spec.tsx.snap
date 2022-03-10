@@ -1,21 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`game screen renders correctly 1`] = `
-<View
-  backgroundColor="#f6f6f6"
-  style={
-    Array [
-      Object {
-        "alignItems": "center",
-        "backgroundColor": "#f6f6f6",
-        "flexBasis": 0,
-        "flexGrow": 1,
-        "flexShrink": 1,
-        "justifyContent": "center",
-      },
-    ]
-  }
->
+exports[`category section renders correctly 1`] = `
+Array [
   <Text
     style={
       Array [
@@ -60,7 +46,7 @@ exports[`game screen renders correctly 1`] = `
     textColor="#6200ee"
   >
     Choose category
-  </Text>
+  </Text>,
   <View
     style={
       Array [
@@ -77,24 +63,24 @@ exports[`game screen renders correctly 1`] = `
   >
     <View
       collapsable={false}
-      isActive={false}
+      isActive={true}
       style={
         Object {
           "backgroundColor": "#6200ee",
-          "borderColor": "transparent",
+          "borderColor": "#ffffff",
           "borderRadius": 4,
           "borderStyle": "solid",
-          "borderWidth": 0,
+          "borderWidth": 4,
           "elevation": 2,
           "flexBasis": 0,
           "flexGrow": 1,
           "flexShrink": 1,
           "justifyContent": "center",
           "minWidth": 64,
-          "paddingBottom": 4,
+          "paddingBottom": 0,
           "paddingLeft": 4,
           "paddingRight": 4,
-          "paddingTop": 4,
+          "paddingTop": 0,
           "shadowColor": "#000000",
           "shadowOffset": Object {
             "height": 0.75,
@@ -131,6 +117,7 @@ exports[`game screen renders correctly 1`] = `
             },
           ]
         }
+        testID="option button 1"
       >
         <View
           style={
@@ -254,6 +241,7 @@ exports[`game screen renders correctly 1`] = `
             },
           ]
         }
+        testID="option button 2"
       >
         <View
           style={
@@ -310,129 +298,6 @@ exports[`game screen renders correctly 1`] = `
         </View>
       </View>
     </View>
-  </View>
-  <RCTScrollView
-    contentContainerStyle={
-      Object {
-        "flexGrow": 1,
-        "paddingBottom": 16,
-        "paddingHorizontal": 16,
-      }
-    }
-    style={
-      Array [
-        Object {
-          "flexBasis": 0,
-          "flexGrow": 1,
-          "flexShrink": 1,
-          "width": "100%",
-        },
-      ]
-    }
-  >
-    <View />
-  </RCTScrollView>
-  <View
-    collapsable={false}
-    style={
-      Object {
-        "backgroundColor": "#E8E8E855",
-        "borderColor": "transparent",
-        "borderRadius": 4,
-        "borderStyle": "solid",
-        "borderWidth": 0,
-        "elevation": 0,
-        "marginBottom": 16,
-        "marginTop": 24,
-        "minWidth": 64,
-        "paddingBottom": 4,
-        "paddingLeft": 8,
-        "paddingRight": 8,
-        "paddingTop": 4,
-      }
-    }
-  >
-    <View
-      accessibilityRole="button"
-      accessibilityState={
-        Object {
-          "disabled": true,
-        }
-      }
-      accessible={true}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        Array [
-          Object {
-            "overflow": "hidden",
-          },
-          Object {
-            "borderRadius": 4,
-          },
-        ]
-      }
-    >
-      <View
-        style={
-          Array [
-            Object {
-              "alignItems": "center",
-              "flexDirection": "row",
-              "justifyContent": "center",
-            },
-            undefined,
-          ]
-        }
-      >
-        <Text
-          numberOfLines={1}
-          selectable={false}
-          style={
-            Array [
-              Object {
-                "color": "#000000",
-                "fontFamily": "System",
-                "fontWeight": "400",
-              },
-              Object {
-                "textAlign": "left",
-              },
-              Array [
-                Object {
-                  "letterSpacing": 1,
-                  "marginHorizontal": 16,
-                  "marginVertical": 9,
-                  "textAlign": "center",
-                },
-                undefined,
-                Object {
-                  "textTransform": "uppercase",
-                },
-                Object {
-                  "color": "rgba(0, 0, 0, 0.32)",
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                Object {
-                  "fontFamily": "System",
-                  "fontWeight": "500",
-                },
-                undefined,
-              ],
-            ]
-          }
-        >
-          Continue
-        </Text>
-      </View>
-    </View>
-  </View>
-</View>
+  </View>,
+]
 `;

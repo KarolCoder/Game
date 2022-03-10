@@ -314,6 +314,7 @@ exports[`choose card screen renders correctly 1`] = `
             "opacity": 1,
           }
         }
+        testID="first card"
       >
         <Text
           style={
@@ -392,6 +393,7 @@ exports[`choose card screen renders correctly 1`] = `
             "opacity": 1,
           }
         }
+        testID="second card"
       >
         <Text
           style={

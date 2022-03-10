@@ -15,7 +15,10 @@ export const WelcomeScreen = () => {
       resizeMode="cover">
       <TopText textColor={colors.primary}>Star Wars Game</TopText>
       <ButtonWrapper>
-        <BottomButton mode="contained" onPress={() => navigate('Game')}>
+        <BottomButton
+          accessibilityHint="bottom button"
+          mode="contained"
+          onPress={() => navigate('Game')}>
           <Title>Play</Title>
         </BottomButton>
       </ButtonWrapper>

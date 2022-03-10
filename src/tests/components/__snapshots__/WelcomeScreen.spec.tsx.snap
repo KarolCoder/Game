@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`welcome screen renders correctly 1`] = `
+exports[`welcome screen  renders correctly 1`] = `
 <View
   accessibilityIgnoresInvertColors={true}
   style={
@@ -119,6 +119,7 @@ exports[`welcome screen renders correctly 1`] = `
       }
     >
       <View
+        accessibilityHint="bottom button"
         accessibilityRole="button"
         accessibilityState={
           Object {

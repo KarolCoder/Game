@@ -20,6 +20,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
       <SelectTitle textColor={colors.primary}>Choose category</SelectTitle>
       <Row>
         <OptionButton
+          testID="option button 1"
           isActive={activeCategory === 'People'}
           mode="contained"
           onPress={() => setActiveCategory('People')}>
@@ -27,6 +28,7 @@ export const CategorySection: React.FC<CategorySectionProps> = ({
         </OptionButton>
         <Spacer width={24} />
         <OptionButton
+          testID="option button 2"
           isActive={activeCategory === 'Starships'}
           mode="contained"
           onPress={() => setActiveCategory('Starships')}>

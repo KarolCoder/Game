@@ -17,6 +17,7 @@ export const BottomButtons: React.FC<BottomButtonsProps> = ({
   return (
     <Row>
       <BottomButton
+        testID="bottom first button"
         mode="contained"
         disabled={isDisabled}
         onPress={onLeftPress}>
@@ -24,6 +25,7 @@ export const BottomButtons: React.FC<BottomButtonsProps> = ({
       </BottomButton>
       <Spacer width={24} />
       <BottomButton
+        testID="bottom second button"
         mode="contained"
         disabled={isDisabled}
         onPress={onRightPress}>

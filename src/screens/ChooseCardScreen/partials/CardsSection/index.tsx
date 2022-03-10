@@ -32,6 +32,7 @@ export const CardsSection: React.FC<CardsSectionProps> = ({
       <SelectTitle textColor={colors.primary}>Choose card</SelectTitle>
       <Row>
         <Card
+          testID="first card"
           disabled={
             (!!resourcesFromData?.firstResource &&
               !!resourcesFromData?.secondResource) ||
@@ -49,6 +50,7 @@ export const CardsSection: React.FC<CardsSectionProps> = ({
         </Card>
         <Spacer width={24} />
         <Card
+          testID="second card"
           disabled={
             (!!resourcesFromData?.firstResource &&
               !!resourcesFromData?.secondResource) ||

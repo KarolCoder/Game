@@ -8,8 +8,10 @@ import {
 import {useState, useCallback} from 'react';
 import {createContainer} from 'unstated-next';
 
-const useGameBase = () => {
-  const [selectedGameValues, setSelectedGameValues] = useState<GameValues>();
+export const useGameBase = (initialState: GameValues | undefined) => {
+  const [selectedGameValues, setSelectedGameValues] = useState<
+    GameValues | undefined
+  >(initialState as GameValues | undefined);
 
   const updateGameCategory = useCallback((category?: GameCategory) => {
     setSelectedGameValues(prev => ({...prev, category}));
@@ -66,6 +68,6 @@ const useGameBase = () => {
   };
 };
 
-const useGameContainer = createContainer(useGameBase);
+export const useGameContainer = createContainer(useGameBase);
 export const useGame = useGameContainer.useContainer;
 export const GameProvider = useGameContainer.Provider;

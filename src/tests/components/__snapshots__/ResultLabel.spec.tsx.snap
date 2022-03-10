@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`result label renders correctly 1`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#000000",
+        "fontFamily": "System",
+        "fontWeight": "400",
+      },
+      Object {
+        "textAlign": "left",
+      },
+      Array [
+        Object {
+          "textAlign": "left",
+        },
+        Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+          "fontFamily": "System",
+          "fontWeight": "500",
+          "writingDirection": "ltr",
+        },
+        Array [
+          Object {
+            "fontSize": 20,
+            "letterSpacing": 0.15,
+            "lineHeight": 30,
+            "marginVertical": 2,
+          },
+          Array [
+            Object {
+              "color": "#6200ee",
+            },
+          ],
+        ],
+      ],
+    ]
+  }
+  textColor="#6200ee"
+>
+  Congratualtions, you won!!!
+</Text>
+`;
+
+exports[`result label renders correctly 2`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#000000",
+        "fontFamily": "System",
+        "fontWeight": "400",
+      },
+      Object {
+        "textAlign": "left",
+      },
+      Array [
+        Object {
+          "textAlign": "left",
+        },
+        Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+          "fontFamily": "System",
+          "fontWeight": "500",
+          "writingDirection": "ltr",
+        },
+        Array [
+          Object {
+            "fontSize": 20,
+            "letterSpacing": 0.15,
+            "lineHeight": 30,
+            "marginVertical": 2,
+          },
+          Array [
+            Object {
+              "color": "#6200ee",
+            },
+          ],
+        ],
+      ],
+    ]
+  }
+  textColor="#6200ee"
+>
+  You lose, loser :D
+</Text>
+`;
+
+exports[`result label renders correctly 3`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#000000",
+        "fontFamily": "System",
+        "fontWeight": "400",
+      },
+      Object {
+        "textAlign": "left",
+      },
+      Array [
+        Object {
+          "textAlign": "left",
+        },
+        Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+          "fontFamily": "System",
+          "fontWeight": "500",
+          "writingDirection": "ltr",
+        },
+        Array [
+          Object {
+            "fontSize": 20,
+            "letterSpacing": 0.15,
+            "lineHeight": 30,
+            "marginVertical": 2,
+          },
+          Array [
+            Object {
+              "color": "#6200ee",
+            },
+          ],
+        ],
+      ],
+    ]
+  }
+  textColor="#6200ee"
+>
+  Tie, try again
+</Text>
+`;
+
+exports[`result label renders correctly 4`] = `
+<Text
+  style={
+    Array [
+      Object {
+        "color": "#000000",
+        "fontFamily": "System",
+        "fontWeight": "400",
+      },
+      Object {
+        "textAlign": "left",
+      },
+      Array [
+        Object {
+          "textAlign": "left",
+        },
+        Object {
+          "color": "rgba(0, 0, 0, 0.87)",
+          "fontFamily": "System",
+          "fontWeight": "500",
+          "writingDirection": "ltr",
+        },
+        Array [
+          Object {
+            "fontSize": 20,
+            "letterSpacing": 0.15,
+            "lineHeight": 30,
+            "marginVertical": 2,
+          },
+          Array [
+            Object {
+              "color": "#6200ee",
+            },
+          ],
+        ],
+      ],
+    ]
+  }
+  textColor="#6200ee"
+>
+  Couldn't resolve winner please go to start
+</Text>
+`;
